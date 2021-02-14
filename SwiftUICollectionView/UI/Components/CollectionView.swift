@@ -122,9 +122,9 @@ extension CollectionView {
         var hostedCell: Cell? {
             willSet {
                 guard let view = newValue else { return }
-                // todo: check if ignoring safe area would help. requires extension of hostingcontroller.
-                //hostController = UIHostingController(rootView: view, ignoreSafeArea: true)
-                hostController = UIHostingController(rootView: view)
+                // ignoring safe area here to avoid a weird bug with
+                // wrong sizing of some items.
+                hostController = UIHostingController(rootView: view, ignoreSafeArea: true)
                 if let hostView = hostController?.view {
                     hostView.frame = contentView.bounds
                     hostView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
