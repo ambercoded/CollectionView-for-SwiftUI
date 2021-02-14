@@ -8,19 +8,14 @@
 import SwiftUI
 
 struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
-    // binding to the parentView's selectedItem property
-    @Binding var selectedIndexPath: Int?
     let items: [Item]
     let cell: (IndexPath, Item) -> Cell
 
     public init(
-        // allows setting which item has been selected
-        selectedIndexPath: Binding<Int?>,
         items: [Item],
         // accept a SwiftUI View as a Cell
         @ViewBuilder cell: @escaping (IndexPath, Item) -> Cell
     ) {
-        self._selectedIndexPath = selectedIndexPath
         self.items = items
         self.cell = cell
     }
@@ -86,7 +81,7 @@ extension CollectionView {
         }
 
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            parent.selectedIndexPath = indexPath.item
+            //parent.selectedIndexPath = indexPath.item
         }
         
         /*
@@ -99,8 +94,6 @@ extension CollectionView {
          return isFocusable
          }
          */
-
-
     }
 }
 
@@ -119,7 +112,7 @@ extension CollectionView {
 
         guard let dataSource = coordinator.dataSource else { return }
 
-        // todo: see if has has changed
+        // todo: see if hash has changed
         let hashHasChanged = true
         if hashHasChanged {
             dataSource.apply(

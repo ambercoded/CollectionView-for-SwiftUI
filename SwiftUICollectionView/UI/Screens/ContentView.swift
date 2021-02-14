@@ -10,19 +10,19 @@ import SwiftUI
 struct ContentView: View {
     let exampleItems = Vegetable.exampleItems
     @State private var selectedItemIndexPath: Int? = nil
+    @State private var selectedVegetable: Vegetable? = nil
 
     var body: some View {
         NavigationView {
             VStack {
                 CollectionView(
-                    selectedIndexPath: $selectedItemIndexPath,
                     items: exampleItems) { indexPath, item in
                     cell(for: item, at: indexPath)
                 }
                 .navigationTitle("Vegetable")
 
                 NavigationLink(
-                    destination: Text("indexPath: \(selectedItemIndexPath ?? -1) :)"),
+                    destination: Text(selectedVegetable?.name ?? "Unknown name"),
                     tag: selectedItemIndexPath ?? 0,
                     selection: $selectedItemIndexPath) {
                     EmptyView()
@@ -45,6 +45,10 @@ extension ContentView {
                         width: geo.size.width,
                         height: geo.size.height
                     )
+            }
+            .onTapGesture {
+                selectedItemIndexPath = indexPath.item
+                selectedVegetable = item
             }
         }
     }
