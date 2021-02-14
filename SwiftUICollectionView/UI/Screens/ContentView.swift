@@ -9,10 +9,25 @@ import SwiftUI
 
 struct ContentView: View {
     let exampleItems = Vegetable.exampleItems
+    @State private var selectedItemIndexPath: Int? = nil
 
     var body: some View {
-        CollectionView(items: exampleItems) { indexPath, item in
-            cell(for: item, at: indexPath)
+        NavigationView {
+            VStack {
+                CollectionView(
+                    selectedIndexPath: $selectedItemIndexPath,
+                    items: exampleItems) { indexPath, item in
+                    cell(for: item, at: indexPath)
+                }
+                .navigationTitle("Vegetable")
+
+                NavigationLink(
+                    destination: Text("indexPath: \(selectedItemIndexPath ?? -1) :)"),
+                    tag: selectedItemIndexPath ?? 0,
+                    selection: $selectedItemIndexPath) {
+                    EmptyView()
+                }
+            }
         }
     }
 }
@@ -25,6 +40,7 @@ extension ContentView {
                 Circle()
                     .fill(Color.gray)
                 Text(item.name)
+                    .multilineTextAlignment(.center)
                     .frame(
                         width: geo.size.width,
                         height: geo.size.height

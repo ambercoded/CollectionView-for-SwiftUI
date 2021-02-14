@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
+    // binding to the parentView's selectedItem property
+    @Binding var selectedIndexPath: Int?
     let items: [Item]
     let cell: (IndexPath, Item) -> Cell
 
     public init(
+        // allows setting which item has been selected
+        selectedIndexPath: Binding<Int?>,
         items: [Item],
         // accept a SwiftUI View as a Cell
         @ViewBuilder cell: @escaping (IndexPath, Item) -> Cell
     ) {
+        self._selectedIndexPath = selectedIndexPath
         self.items = items
         self.cell = cell
     }
@@ -49,7 +54,6 @@ extension CollectionView {
         )
 
         addDataSourceToCoordinator(dataSource: dataSource, in: context)
-
         reloadData(in: collectionView, in: context)
         return collectionView
     }
@@ -63,6 +67,40 @@ extension CollectionView {
 extension CollectionView {
     private func layout(context: Context) -> UICollectionViewLayout {
         return UICollectionViewFlowLayout()
+    }
+}
+
+// MARK: - Coordinator Creation
+extension CollectionView {
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    class Coordinator: NSObject, UICollectionViewDelegate {
+        var parent: CollectionView
+        fileprivate typealias DataSource = UICollectionViewDiffableDataSource<CollectionView.Sections, Item>
+        fileprivate var dataSource: DataSource? = nil
+
+        init(parent: CollectionView) {
+            self.parent = parent
+        }
+
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            parent.selectedIndexPath = indexPath.item
+        }
+        
+        /*
+         fileprivate var isFocusable: Bool = false
+
+         // disable focusing for cell. instead use SwiftUI's views focus
+         // allows interaction and focus with the SwiftUI view
+         // eg clicking SwiftUI buttons
+         func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+         return isFocusable
+         }
+         */
+
+
     }
 }
 
@@ -81,10 +119,22 @@ extension CollectionView {
 
         guard let dataSource = coordinator.dataSource else { return }
 
-        dataSource.apply(
-            snapshot(),
-            animatingDifferences: animated
-        )
+        // todo: see if has has changed
+        let hashHasChanged = true
+        if hashHasChanged {
+            dataSource.apply(
+                snapshot(),
+                animatingDifferences: animated) {
+                /*
+                 // temporarily disable focus when updating snapshot
+                 // neccessary to avoid problem with animation on snapshot update
+                 coordinator.isFocusable = true
+                 collectionView.setNeedsFocusUpdate()
+                 collectionView.updateFocusIfNeeded()
+                 coordinator.isFocusable = false
+                 */
+            }
+        }
     }
 
     private func snapshot() -> NSDiffableDataSourceSnapshot<Sections, Item> {
@@ -92,18 +142,6 @@ extension CollectionView {
         snapshot.appendSections([.main])
         snapshot.appendItems(items)
         return snapshot
-    }
-}
-
-// MARK: - Coordinator
-extension CollectionView {
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-
-    class Coordinator: NSObject, UICollectionViewDelegate {
-        fileprivate typealias DataSource = UICollectionViewDiffableDataSource<CollectionView.Sections, Item>
-        fileprivate var dataSource: DataSource? = nil
     }
 }
 
