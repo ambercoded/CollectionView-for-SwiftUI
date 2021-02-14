@@ -7,66 +7,118 @@
 
 import SwiftUI
 
-struct CollectionView: UIViewRepresentable {
+struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
+    let items: [Item]
+    let cell: (IndexPath, Item) -> Cell
+
+    // accept a SwiftUI View as a Cell
+    public init(items: [Item], @ViewBuilder cell: @escaping (IndexPath, Item) -> Cell) {
+        self.items = items
+        self.cell = cell
+    }
+
     func makeUIView(context: Context) -> UICollectionView {
+        let cellIdentifier = "hostCell"
         let collectionView = UICollectionView(
             frame: .zero,
-            collectionViewLayout: UICollectionViewFlowLayout()
+            collectionViewLayout: layout(context: context)
         )
 
+        collectionView.delegate = context.coordinator
         collectionView.register(
-            UICollectionViewCell.self,
-            forCellWithReuseIdentifier: "vegetableCell"
+            HostCell.self,
+            forCellWithReuseIdentifier: cellIdentifier
         )
 
-        let dataSource = UICollectionViewDiffableDataSource<CollectionView.Sections, Vegetable>(collectionView: collectionView) { collectionView, indexPath, vegetable in
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "vegetableCell",
-                for: indexPath
-            )
+        let dataSource = Coordinator.DataSource(
+            collectionView: collectionView,
+            cellProvider: { collectionView, indexPath, item in
+                let hostCell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: cellIdentifier,
+                    for: indexPath
+                ) as? HostCell
+                hostCell?.hostedCell = cell(indexPath, item)
+                return hostCell
+            }
+        )
 
-            cell.backgroundColor = .green
-            // perform any additional cell configuration here
-            return cell
-        }
-
-        populate(dataSource: dataSource)
         addDataSourceToCoordinator(dataSource: dataSource, in: context)
+
+        reloadData(in: collectionView, in: context)
         return collectionView
     }
 
-    func updateUIView(_ uiView: UICollectionView, context: Context) {
-        let dataSource = context.coordinator.dataSource
+    private func layout(context: Context) -> UICollectionViewLayout {
+        return UICollectionViewFlowLayout()
+    }
 
-        // you can update the content of the datasource here (e.g. call populate datasource here to change a snapshot)
+    func reloadData(
+        in collectionView: UICollectionView,
+        in context: Context,
+        animated: Bool = false
+    ) {
+        let coordinator = context.coordinator
+
+        guard let dataSource = coordinator.dataSource else { return }
+
+        dataSource.apply(
+            snapshot(),
+            animatingDifferences: animated
+        )
+    }
+
+    private func snapshot() -> NSDiffableDataSourceSnapshot<Sections, Item> {
+        var snapshot = NSDiffableDataSourceSnapshot<Sections, Item>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(items)
+        return snapshot
+    }
+
+    func updateUIView(_ uiView: UICollectionView, context: Context) {
+        reloadData(in: uiView, in: context, animated: true)
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
 
-    func addDataSourceToCoordinator(dataSource: UICollectionViewDiffableDataSource<Sections, Vegetable>, in context: Context) {
+    func addDataSourceToCoordinator(dataSource: UICollectionViewDiffableDataSource<Sections, Item>, in context: Context) {
         context.coordinator.dataSource = dataSource
-    }
-
-    func populate(dataSource: UICollectionViewDiffableDataSource<CollectionView.Sections, Vegetable>) {
-        var snapshot = NSDiffableDataSourceSnapshot<CollectionView.Sections, Vegetable>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(
-            [
-                Vegetable(name: "Carrot"),
-                Vegetable(name: "Broccoli"),
-                Vegetable(name: "Eggplant")
-            ]
-        )
-        dataSource.apply(snapshot)
     }
 }
 
 // MARK: - Coordinator
 extension CollectionView {
-    class Coordinator: NSObject {
-        var dataSource: UICollectionViewDiffableDataSource<CollectionView.Sections, Vegetable>?
+    class Coordinator: NSObject, UICollectionViewDelegate {
+        fileprivate typealias DataSource = UICollectionViewDiffableDataSource<CollectionView.Sections, Item>
+        fileprivate var dataSource: DataSource? = nil
     }
 }
 
+// MARK: - Cell (wrapped SwiftUI View)
+extension CollectionView {
+    private class HostCell: UICollectionViewCell {
+        private var hostController: UIHostingController<Cell>?
+
+        override func prepareForReuse() {
+            if let hostView = hostController?.view {
+                hostView.removeFromSuperview()
+            }
+            hostController = nil
+        }
+
+        var hostedCell: Cell? {
+            willSet {
+                guard let view = newValue else { return }
+                // todo: check if ignoring safe area would help. requires extension of hostingcontroller.
+                //hostController = UIHostingController(rootView: view, ignoreSafeArea: true)
+                hostController = UIHostingController(rootView: view)
+                if let hostView = hostController?.view {
+                    hostView.frame = contentView.bounds
+                    hostView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    contentView.addSubview(hostView)
+                }
+            }
+        }
+    }
+}

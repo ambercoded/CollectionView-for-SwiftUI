@@ -18,6 +18,6 @@ struct VegetableCellView: View {
 
 struct VegetableCellView_Previews: PreviewProvider {
     static var previews: some View {
-        VegetableCellView(vegetable: Vegetable(name: "Cucumber"))
+        VegetableCellView(vegetable: Vegetable(name: "Cucumber", color: "green"))
     }
 }
