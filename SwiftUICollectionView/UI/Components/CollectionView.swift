@@ -11,12 +11,18 @@ struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
     let items: [Item]
     let cell: (IndexPath, Item) -> Cell
 
-    // accept a SwiftUI View as a Cell
-    public init(items: [Item], @ViewBuilder cell: @escaping (IndexPath, Item) -> Cell) {
+    public init(
+        items: [Item],
+        // accept a SwiftUI View as a Cell
+        @ViewBuilder cell: @escaping (IndexPath, Item) -> Cell
+    ) {
         self.items = items
         self.cell = cell
     }
+}
 
+// MARK: - Lifecycle Methods
+extension CollectionView {
     func makeUIView(context: Context) -> UICollectionView {
         let cellIdentifier = "hostCell"
         let collectionView = UICollectionView(
@@ -48,8 +54,22 @@ struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
         return collectionView
     }
 
+    func updateUIView(_ uiView: UICollectionView, context: Context) {
+        reloadData(in: uiView, in: context, animated: true)
+    }
+}
+
+// MARK: - Layout
+extension CollectionView {
     private func layout(context: Context) -> UICollectionViewLayout {
         return UICollectionViewFlowLayout()
+    }
+}
+
+// MARK: - Data Source
+extension CollectionView {
+    func addDataSourceToCoordinator(dataSource: UICollectionViewDiffableDataSource<Sections, Item>, in context: Context) {
+        context.coordinator.dataSource = dataSource
     }
 
     func reloadData(
@@ -73,22 +93,14 @@ struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
         snapshot.appendItems(items)
         return snapshot
     }
-
-    func updateUIView(_ uiView: UICollectionView, context: Context) {
-        reloadData(in: uiView, in: context, animated: true)
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-
-    func addDataSourceToCoordinator(dataSource: UICollectionViewDiffableDataSource<Sections, Item>, in context: Context) {
-        context.coordinator.dataSource = dataSource
-    }
 }
 
 // MARK: - Coordinator
 extension CollectionView {
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
     class Coordinator: NSObject, UICollectionViewDelegate {
         fileprivate typealias DataSource = UICollectionViewDiffableDataSource<CollectionView.Sections, Item>
         fileprivate var dataSource: DataSource? = nil
