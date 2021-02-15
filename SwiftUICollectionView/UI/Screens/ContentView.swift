@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     let exampleItems = Vegetable.exampleItems
+    
     @State private var selectedItemIndexPath: Int? = nil
     @State private var selectedVegetable: Vegetable? = nil
 
