@@ -20,6 +20,8 @@ struct Vegetable: Hashable {
         lhs.id == rhs.id
     }
 
+    static let preview = Vegetable(name: "Cucumber", color: "green")
+
     static let exampleItems = [
         Vegetable(name: "Asparagus", color: "white"),
         Vegetable(name: "Carrot", color: "orange"),

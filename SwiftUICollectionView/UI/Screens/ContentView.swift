@@ -15,26 +15,48 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                CollectionView(
-                    items: exampleItems) { indexPath, item in
-                    cell(for: item, at: indexPath)
-                }
+            content
                 .navigationTitle("Vegetable")
-
-                NavigationLink(
-                    destination: Text(selectedVegetable?.name ?? "Unknown name"),
-                    tag: selectedItemIndexPath ?? 0,
-                    selection: $selectedItemIndexPath) {
-                    EmptyView()
-                }
-            }
         }
     }
 }
 
 // MARK: - View parts
 extension ContentView {
+    var content: some View {
+        VStack {
+            collectionView
+            navigationLink
+        }
+    }
+
+    var collectionView: some View {
+        CollectionView(
+            items: exampleItems) { indexPath, item in
+            cell(for: item, at: indexPath)
+        }
+    }
+
+    var navigationLink: some View {
+        NavigationLink(
+            destination: DetailViewControllerRepresentable(selectedVegetable: selectedVegetable ?? .preview),
+            tag: selectedItemIndexPath ?? 0,
+            selection: $selectedItemIndexPath) {
+            EmptyView()
+        }
+    }
+
+    var navigationLinkOld: some View {
+        NavigationLink(
+            destination: DetailView(
+                vegetable: selectedVegetable ?? Vegetable(name: "Empty Veggy", color: "white")
+            ),
+            tag: selectedItemIndexPath ?? 0,
+            selection: $selectedItemIndexPath) {
+            EmptyView()
+        }
+    }
+
     func cell(for item: Vegetable, at indexPath: IndexPath) -> some View {
         GeometryReader { geo in
             ZStack {

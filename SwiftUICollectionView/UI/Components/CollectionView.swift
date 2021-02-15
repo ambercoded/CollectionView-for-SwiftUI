@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CollectionView<Item: Hashable, Cell: View>: UIViewRepresentable {
     let items: [Item]
+    // the SwiftUI view for the cell can be passed to the closure
     let cell: (IndexPath, Item) -> Cell
 
     public init(
@@ -65,7 +66,7 @@ extension CollectionView {
     }
 }
 
-// MARK: - Coordinator Creation
+// MARK: - Coordinator & CollectionView Delegate
 extension CollectionView {
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -74,6 +75,10 @@ extension CollectionView {
     class Coordinator: NSObject, UICollectionViewDelegate {
         fileprivate typealias DataSource = UICollectionViewDiffableDataSource<CollectionView.Sections, Item>
         fileprivate var dataSource: DataSource? = nil
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("selected item at indexPath: \(indexPath)")
     }
 }
 
@@ -110,7 +115,10 @@ extension CollectionView {
     }
 }
 
-// MARK: - Cell (wrapped SwiftUI View)
+
+// MARK: - Cell
+/// this cell wrapper allows to use a native SwiftUI view as a cell for the UICollectionView
+/// it wraps the SwiftUI View in a UIHostingController.
 extension CollectionView {
     private class HostCell: UICollectionViewCell {
         private var hostController: UIHostingController<Cell>?

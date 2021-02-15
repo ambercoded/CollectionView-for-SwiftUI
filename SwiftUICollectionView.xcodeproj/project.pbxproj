@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		971BC0E625DAAF7800B085A8 /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971BC0E525DAAF7800B085A8 /* AnimationController.swift */; };
+		971BC0E925DAB87D00B085A8 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971BC0E825DAB87D00B085A8 /* DetailView.swift */; };
+		971BC0EC25DAB9FB00B085A8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971BC0EB25DAB9FB00B085A8 /* DetailViewController.swift */; };
+		971BC0EF25DABB6900B085A8 /* DetailViewRep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971BC0EE25DABB6900B085A8 /* DetailViewRep.swift */; };
 		9789467525D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9789467425D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift */; };
 		9796E54E25D922CC00AD42F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796E54D25D922CC00AD42F5 /* AppDelegate.swift */; };
 		9796E55025D922CC00AD42F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796E54F25D922CC00AD42F5 /* SceneDelegate.swift */; };
@@ -21,6 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		971BC0E525DAAF7800B085A8 /* AnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationController.swift; sourceTree = "<group>"; };
+		971BC0E825DAB87D00B085A8 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		971BC0EB25DAB9FB00B085A8 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		971BC0EE25DABB6900B085A8 /* DetailViewRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewRep.swift; sourceTree = "<group>"; };
 		9789467425D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIHostingController+disableSafeArea.swift"; sourceTree = "<group>"; };
 		9796E54A25D922CC00AD42F5 /* SwiftUICollectionView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUICollectionView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9796E54D25D922CC00AD42F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +100,7 @@
 			children = (
 				9796E57725D92EFA00AD42F5 /* Screens */,
 				9796E57A25D92F0A00AD42F5 /* Components */,
+				971BC0E525DAAF7800B085A8 /* AnimationController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -116,7 +125,10 @@
 		9796E57725D92EFA00AD42F5 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				971BC0E825DAB87D00B085A8 /* DetailView.swift */,
 				9796E55125D922CC00AD42F5 /* ContentView.swift */,
+				971BC0EE25DABB6900B085A8 /* DetailViewRep.swift */,
+				971BC0EB25DAB9FB00B085A8 /* DetailViewController.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -200,12 +212,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				971BC0EC25DAB9FB00B085A8 /* DetailViewController.swift in Sources */,
 				9796E56625D923F300AD42F5 /* Model.swift in Sources */,
 				9789467525D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift in Sources */,
+				971BC0EF25DABB6900B085A8 /* DetailViewRep.swift in Sources */,
 				9796E54E25D922CC00AD42F5 /* AppDelegate.swift in Sources */,
+				971BC0E925DAB87D00B085A8 /* DetailView.swift in Sources */,
 				9796E57425D92EEF00AD42F5 /* VegetableCellView.swift in Sources */,
 				9796E55025D922CC00AD42F5 /* SceneDelegate.swift in Sources */,
 				9796E56325D9234500AD42F5 /* CollectionView.swift in Sources */,
+				971BC0E625DAAF7800B085A8 /* AnimationController.swift in Sources */,
 				9796E56F25D9251600AD42F5 /* CollectionView+Extensions.swift in Sources */,
 				9796E55225D922CC00AD42F5 /* ContentView.swift in Sources */,
 			);
