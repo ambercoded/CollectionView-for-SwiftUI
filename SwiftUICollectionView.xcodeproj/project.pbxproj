@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		977B135425DBD2420024136C /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977B135325DBD2420024136C /* AnimationController.swift */; };
 		9789467525D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9789467425D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift */; };
 		9796E54E25D922CC00AD42F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796E54D25D922CC00AD42F5 /* AppDelegate.swift */; };
 		9796E55025D922CC00AD42F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796E54F25D922CC00AD42F5 /* SceneDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		977B135325DBD2420024136C /* AnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationController.swift; sourceTree = "<group>"; };
 		9789467425D9CA6B00EADB65 /* UIHostingController+disableSafeArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIHostingController+disableSafeArea.swift"; sourceTree = "<group>"; };
 		9796E54A25D922CC00AD42F5 /* SwiftUICollectionView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUICollectionView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9796E54D25D922CC00AD42F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		9796E56825D9246B00AD42F5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				977B135325DBD2420024136C /* AnimationController.swift */,
 				9796E57725D92EFA00AD42F5 /* Screens */,
 				9796E57A25D92F0A00AD42F5 /* Components */,
 			);
@@ -206,6 +209,7 @@
 				9796E57425D92EEF00AD42F5 /* VegetableCellView.swift in Sources */,
 				9796E55025D922CC00AD42F5 /* SceneDelegate.swift in Sources */,
 				9796E56325D9234500AD42F5 /* CollectionView.swift in Sources */,
+				977B135425DBD2420024136C /* AnimationController.swift in Sources */,
 				9796E56F25D9251600AD42F5 /* CollectionView+Extensions.swift in Sources */,
 				9796E55225D922CC00AD42F5 /* ContentView.swift in Sources */,
 			);
